@@ -10,7 +10,7 @@ mysql:
   user: root
   password: mysql
 log:
-  path: ./log/
+  path: ./logs/
   access_name: access.log
   error_name: error.log
   error_level: debug
@@ -18,6 +18,12 @@ redis:
   host: 127.0.0.1
   port: "6379"
   password: ""
+  db: 1
+  dialTimeOut: 1
+  readTimeOut: 1
+  writeTimeOut: 1
+  poolTimeOut: 1
+  poolSize: 100
 email:
   host: smtp.qq.com
   account: xxx@qq.com

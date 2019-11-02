@@ -5,8 +5,6 @@ import (
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"net/http"
-	"nomal-gin/dao"
-	"nomal-gin/services"
 	"nomal-gin/views"
 )
 
@@ -31,16 +29,11 @@ func (a *app) initRouter() {
 	a.g = g
 }
 
-func (a *app) initService(route  gin.IRouter){
-	// 创建user dao层
-	ud := dao.NewUserDao(a.db)
-
-	// 根据dao层构建service层
-	us := services.NewUserService(ud)
+func (a *app) initService(route gin.IRouter) {
 
 	// 根据service层构建 view层
-	uv := views.NewUserView(us)
+	uv := views.NewUserView(a.db, a.cache)
 
 	// 为view层绑定路由
-	uv.BindRoute(route,us)
+	uv.BindRoute(route)
 }

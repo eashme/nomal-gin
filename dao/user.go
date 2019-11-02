@@ -2,6 +2,11 @@ package dao
 
 import "database/sql"
 
+type User struct {
+	Name string
+	Age int
+}
+
 type UserDao struct {
 	*BaseDao
 }
@@ -12,6 +17,10 @@ func NewUserDao(db *sql.DB) *UserDao {
 
 // if not implement their method , while panic
 
-func (u *UserDao) TableName() string {
+func (ud *UserDao) TableName() string {
 	return "user"
+}
+
+func (ud *UserDao) GetAll(){
+
 }

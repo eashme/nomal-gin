@@ -8,3 +8,17 @@ type IPageNator interface {
 	TotalPage() int64
 	Limit() int64
 }
+
+type IBaseService interface {
+}
+
+type IUserService interface {
+	GetAll(page, pageSize int) (IPageNator, *WarpErr)
+}
+
+// 用户信息接口
+type IUser interface {
+	ID() int64
+	Name() string
+	Age() int
+}

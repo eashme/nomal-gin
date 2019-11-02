@@ -6,17 +6,17 @@ import (
 )
 
 type Config struct {
-	Env     bool   `yaml:"env"`
-	MigrateDB bool `yaml:"migrate_db"`
-	Version string `yaml:"version"`
-	App     struct {
+	Env       bool   `yaml:"env"`
+	MigrateDB bool   `yaml:"migrate_db"`
+	Version   string `yaml:"version"`
+	App       struct {
 		Port string `yaml:"port"`
 	} `yaml:"app"`
 
 	Mysql struct {
 		Name     string `yaml:"name"`
 		Host     string `yaml:"host"`
-		Port     string `yaml:"port"`
+		Port     int64  `yaml:"port"`
 		User     string `yaml:"user"`
 		Password string `yaml:"password"`
 	} `yaml:"mysql"`
@@ -29,9 +29,15 @@ type Config struct {
 	} `yaml:"log"`
 
 	Redis struct {
-		Host     string `yaml:"host"`
-		Port     string `yaml:"port"`
-		Password string `yaml:"password"`
+		Host         string `yaml:"host"`
+		Port         int64  `yaml:"port"`
+		Password     string `yaml:"password"`
+		Db           int    `yaml:"db"`
+		DialTimeOut  int    `yaml:"dialTimeOut"`
+		ReadTimeOut  int    `yaml:"readTimeOut"`
+		WriteTimeOut int    `yaml:"writeTimeOut"`
+		PoolTimeOut  int    `yaml:"poolTimeOut"`
+		PoolSize     int    `yaml:"poolSize"`
 	} `yaml:"redis"`
 }
 
