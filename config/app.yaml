@@ -1,0 +1,25 @@
+env: false
+migrate_db: true
+version: v1
+app:
+  port: "8888"
+mysql:
+  name: nomal
+  host: 127.0.0.1
+  port: "3306"
+  user: root
+  password: mysql
+log:
+  path: ./log/
+  access_name: access.log
+  error_name: error.log
+  error_level: debug
+redis:
+  host: 127.0.0.1
+  port: "6379"
+  password: ""
+email:
+  host: smtp.qq.com
+  account: xxx@qq.com
+  port: 465
+  password: xxxxx
