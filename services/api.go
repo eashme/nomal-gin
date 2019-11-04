@@ -10,6 +10,7 @@ type IPageNator interface {
 }
 
 type IBaseService interface {
+
 }
 
 type IUserService interface {

@@ -6,19 +6,19 @@ import (
 	"nomal-gin/dao"
 )
 
-type UserService struct {
+type userService struct {
 	*BaseService
 	ud dao.IUserDao
 }
 
-func NewUserService(db *sql.DB, cache cache.ICache) *UserService {
-	return &UserService{NewBaseService(cache), dao.NewUserDao(db)}
+func NewUserService(db *sql.DB, cache cache.ICache) *userService {
+	return &userService{NewBaseService(cache), dao.NewUserDao(db)}
 }
 
-func (us *UserService) Get(id int64) (*dao.User, ) {
-
+func (us *userService) Get(id int64) (*dao.User, *WarpErr) {
+	return nil,nil
 }
 
-func (us *UserService)GetAll(page,pageSize int) (IPageNator,*WarpErr){
-
+func (us *userService)GetAll(page,pageSize int) (IPageNator,*WarpErr){
+	return nil,nil
 }

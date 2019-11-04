@@ -21,15 +21,15 @@ func (a *app) initRouter() {
 			"message": "pong",
 		})
 	})
-	// 创建版本路由组
+	// 创建版本路由组 /v1
 	route := g.Group(config.Version)
 	// 初始化服务,并为服务绑定路由
-	a.initService(route)
+	a.initViews(route)
 
 	a.g = g
 }
 
-func (a *app) initService(route gin.IRouter) {
+func (a *app) initViews(route gin.IRouter) {
 
 	// 根据service层构建 view层
 	uv := views.NewUserView(a.db, a.cache)

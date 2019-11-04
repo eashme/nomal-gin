@@ -1,0 +1,258 @@
+basePath: '{{.BasePath}}'
+definitions:
+  docs.ResponseInvalidParam:
+    properties:
+      code:
+        example: 400
+        type: integer
+      data:
+        type: string
+      message:
+        example: param is not valid
+        type: string
+    type: object
+  docs.ResponseOk:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data:
+        example: success
+        type: string
+      message:
+        example: ok
+        type: string
+    type: object
+  docs.ResponseServerErr:
+    properties:
+      code:
+        example: 500
+        type: integer
+      data:
+        type: string
+      message:
+        example: internal server error
+        type: string
+    type: object
+  docs.ResponseUser:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/docs.User'
+        type: object
+      msg:
+        type: string
+    type: object
+  docs.ResponseUsers:
+    properties:
+      code:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/docs.User'
+        type: array
+      msg:
+        type: string
+    type: object
+  docs.User:
+    properties:
+      age:
+        type: integer
+      name:
+        type: string
+    type: object
+host: '{{.Host}}'
+info:
+  contact: {}
+  description: '{{.Description}}'
+  license: {}
+  title: '{{.Title}}'
+  version: '{{.Version}}'
+paths:
+  /user:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 增加用户
+      parameters:
+      - description: 代理人ID
+        in: formData
+        name: agent_id
+        required: true
+        type: integer
+      - description: 姓名
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: 年龄
+        in: formData
+        name: age
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            items:
+              $ref: '#/definitions/docs.ResponseOk'
+            type: array
+        "400":
+          description: bad parameters
+          schema:
+            $ref: '#/definitions/docs.ResponseInvalidParam'
+            type: object
+        "500":
+          description: internal server error
+          schema:
+            $ref: '#/definitions/docs.ResponseServerErr'
+            type: object
+      summary: 增加用户
+      tags:
+      - user
+  /user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据用户ID,删除用户
+      parameters:
+      - description: 用户ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            items:
+              $ref: '#/definitions/docs.ResponseOk'
+            type: array
+        "400":
+          description: bad parameters
+          schema:
+            $ref: '#/definitions/docs.ResponseInvalidParam'
+            type: object
+        "500":
+          description: internal server error
+          schema:
+            $ref: '#/definitions/docs.ResponseServerErr'
+            type: object
+      summary: 删除用户
+      tags:
+      - user
+    get:
+      consumes:
+      - application/json
+      description: 根据用户ID,获取用户
+      parameters:
+      - description: 用户ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            items:
+              $ref: '#/definitions/docs.ResponseUser'
+            type: array
+        "400":
+          description: bad parameters
+          schema:
+            $ref: '#/definitions/docs.ResponseInvalidParam'
+            type: object
+        "500":
+          description: internal server error
+          schema:
+            $ref: '#/definitions/docs.ResponseServerErr'
+            type: object
+      summary: 根据用户ID
+      tags:
+      - user
+    put:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 更新用户信息
+      parameters:
+      - description: 用户ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 姓名
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: 年龄
+        in: formData
+        name: email
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            items:
+              $ref: '#/definitions/docs.ResponseOk'
+            type: array
+        "400":
+          description: bad parameters
+          schema:
+            $ref: '#/definitions/docs.ResponseInvalidParam'
+            type: object
+        "500":
+          description: internal server error
+          schema:
+            $ref: '#/definitions/docs.ResponseServerErr'
+            type: object
+      summary: 更新用户信息
+      tags:
+      - user
+  /users:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 根据条件筛选用户
+      parameters:
+      - description: 姓名
+        in: query
+        name: name
+        type: integer
+      - description: 年龄
+        in: query
+        name: age
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/docs.ResponseUsers'
+            type: object
+        "400":
+          description: bad parameters
+          schema:
+            $ref: '#/definitions/docs.ResponseInvalidParam'
+            type: object
+        "500":
+          description: internal server error
+          schema:
+            $ref: '#/definitions/docs.ResponseServerErr'
+            type: object
+      summary: 用户列表接口
+      tags:
+      - user
+swagger: "2.0"

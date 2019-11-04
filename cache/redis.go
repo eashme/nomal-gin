@@ -8,13 +8,13 @@ import (
 	"time"
 )
 
-type RedisCache struct {
+type redisCache struct {
 	client *redis.Client
 }
 
 func NewRedisCache(ip string, port int, passWord string, db int, dialTimeOut, readTimeout, writeTimeout,
-poolTimeout time.Duration, poolSize int) *RedisCache {
-	return &RedisCache{redis.NewClient(&redis.Options{
+poolTimeout time.Duration, poolSize int) *redisCache {
+	return &redisCache{redis.NewClient(&redis.Options{
 		Addr:         fmt.Sprintf("%s:%d", ip, port),
 		Password:     passWord,
 		DB:           db,
@@ -26,14 +26,14 @@ poolTimeout time.Duration, poolSize int) *RedisCache {
 	})}
 }
 
-func (rc *RedisCache) Ping() bool {
+func (rc *redisCache) Ping() bool {
 	if err := rc.client.Ping().Err(); err != nil {
 		return false
 	}
 	return true
 }
 
-func (rc *RedisCache) Set(key string, val interface{}, expiration time.Duration) (err error) {
+func (rc *redisCache) Set(key string, val interface{}, expiration time.Duration) (err error) {
 	err = rc.client.Set(key, val, 0).Err()
 	if expiration > 0 {
 		rc.client.Expire(key, expiration)
@@ -41,15 +41,15 @@ func (rc *RedisCache) Set(key string, val interface{}, expiration time.Duration)
 	return err
 }
 
-func (rc *RedisCache) GetString(key string) string {
+func (rc *redisCache) GetString(key string) string {
 	return rc.client.Get(key).String()
 }
 
-func (rc *RedisCache) GetInt64(key string) (val int64, err error) {
+func (rc *redisCache) GetInt64(key string) (val int64, err error) {
 	return rc.client.Get(key).Int64()
 }
 
-func (rc *RedisCache) Get(key string, val interface{}) (ok bool, err error) {
+func (rc *redisCache) Get(key string, val interface{}) (ok bool, err error) {
 	switch reflect.TypeOf(val).Kind() {
 	case reflect.Uintptr, reflect.Ptr, reflect.UnsafePointer:
 		if err = rc.client.Get(key).Scan(val); err != nil {
@@ -68,23 +68,23 @@ func (rc *RedisCache) Get(key string, val interface{}) (ok bool, err error) {
 
 }
 
-func (rc *RedisCache) Exist(keys ...string) (int64, error) {
+func (rc *redisCache) Exist(keys ...string) (int64, error) {
 	return rc.client.Exists(keys...).Result()
 }
 
-func (rc *RedisCache) Expire(key string, t time.Duration) {
+func (rc *redisCache) Expire(key string, t time.Duration) {
 	rc.client.Expire(key, t)
 }
 
-func (rc *RedisCache) Delete(key ...string) (int64, error) {
+func (rc *redisCache) Delete(key ...string) (int64, error) {
 	return rc.client.Del(key...).Result()
 }
 
-func (rc *RedisCache) HSet(key string, subKey string, val interface{}) (err error) {
+func (rc *redisCache) HSet(key string, subKey string, val interface{}) (err error) {
 	return rc.client.HSet(key, subKey, val).Err()
 }
 
-func (rc *RedisCache) HGet(key string, subKey string, val interface{}) (ok bool, err error) {
+func (rc *redisCache) HGet(key string, subKey string, val interface{}) (ok bool, err error) {
 	switch reflect.TypeOf(val).Kind() {
 	case reflect.Uintptr, reflect.Ptr, reflect.UnsafePointer:
 		if err = rc.client.HGet(key, subKey).Scan(val); err != nil {
@@ -101,30 +101,30 @@ func (rc *RedisCache) HGet(key string, subKey string, val interface{}) (ok bool,
 	}
 }
 
-func (rc *RedisCache) HGetAll(key string) (map[string]string, error) {
+func (rc *redisCache) HGetAll(key string) (map[string]string, error) {
 	return rc.client.HGetAll(key).Result()
 }
 
-func (rc *RedisCache) HMGet(key string, subKey ...string) ([]interface{}, error) {
+func (rc *redisCache) HMGet(key string, subKey ...string) ([]interface{}, error) {
 	return rc.client.HMGet(key, subKey...).Result()
 }
 
-func (rc *RedisCache) HMSet(key string, fields map[string]interface{}) (err error) {
+func (rc *redisCache) HMSet(key string, fields map[string]interface{}) (err error) {
 	return rc.client.HMSet(key, fields).Err()
 }
 
-func (rc *RedisCache) LRange(key string, start, stop int64) ([]string, error) {
+func (rc *redisCache) LRange(key string, start, stop int64) ([]string, error) {
 	return rc.client.LRange(key, start, stop).Result()
 }
 
-func (rc *RedisCache) LPush(key string, data ...interface{}) (int64, error) {
+func (rc *redisCache) LPush(key string, data ...interface{}) (int64, error) {
 	return rc.client.LPush(key, data...).Result()
 }
 
-func (rc *RedisCache) RPush(key string, data ...interface{}) (int64, error) {
+func (rc *redisCache) RPush(key string, data ...interface{}) (int64, error) {
 	return rc.client.RPush(key, data...).Result()
 }
 
-func (rc *RedisCache) Close() error {
+func (rc *redisCache) Close() error {
 	return rc.client.Close()
 }

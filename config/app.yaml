@@ -2,11 +2,11 @@ env: false
 migrate_db: true
 version: v1
 app:
-  port: "8888"
+  port: 8888
 mysql:
   name: nomal
   host: 127.0.0.1
-  port: "3306"
+  port: 3306
   user: root
   password: mysql
 log:
@@ -16,7 +16,7 @@ log:
   error_level: debug
 redis:
   host: 127.0.0.1
-  port: "6379"
+  port: 6379
   password: ""
   db: 1
   dialTimeOut: 1

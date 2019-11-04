@@ -4,18 +4,23 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"io"
 	"log"
 	"net/http"
-	"nomal-gin/cache"
-	"nomal-gin/utils/errlog"
 	"os"
 	"os/signal"
 	"strconv"
 	"syscall"
 	"time"
+
+	// internal package
+	"nomal-gin/cache"
+	_ "nomal-gin/docs"
+	"nomal-gin/utils/errlog"
+
+	// extra package
+	"github.com/gin-gonic/gin"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 const configPath = "./config/app.yaml"
@@ -35,6 +40,7 @@ func New() *app {
 	app.loadConfig()
 	app.loadLog()
 	app.connectDB()
+	app.connectCache()
 	app.initRouter()
 	return app
 }
@@ -87,7 +93,7 @@ func (a *app) connectCache() {
 		time.Duration(config.Redis.ReadTimeOut)*time.Second,
 		time.Duration(config.Redis.WriteTimeOut)*time.Second,
 		time.Duration(config.Redis.PoolTimeOut)*time.Second,
-		1,
+		config.Redis.PoolSize,
 	)
 }
 
@@ -97,7 +103,6 @@ func (a *app) Run() {
 		Addr:    addr,
 		Handler: a.g,
 	}
-
 	go func() {
 		// service connections
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -119,7 +124,7 @@ func (a *app) gracefulClose(srv *http.Server) {
 	<-quit
 	errlog.Info("Shutdown Server ...")
 	// 先关闭gin服务
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second * 2)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*2)
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
 		errlog.Fatal("Server Shutdown:", err)

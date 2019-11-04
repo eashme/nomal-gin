@@ -59,4 +59,3 @@ func respUsers(val []services.IUser) interface{} {
 	}
 	return res
 }
-
